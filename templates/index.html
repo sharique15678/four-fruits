@@ -29,6 +29,12 @@
                console.log('Slider value updated');
                $('#' + msg.who).val(msg.data);
            });
+            function send(){
+               socket.emit('recieve', "hello");
+            }
+            socket.on('send', function(msg) {
+               alert(msg);
+           });
          });
       </script>
    </head>
@@ -44,6 +50,7 @@
                <label for="formControlRange">Demo Slider 2</label>
                <input type="range" class="form-control-range sync" id="slider2" min="0" max="50" value="{{slider2}}">
             </div>
+            <button onclick="send()">send it</button>
          </form>
       </div>
    </body>
