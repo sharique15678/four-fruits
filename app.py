@@ -1,18 +1,25 @@
-
-# A very simple Flask Hello World app for you to get started with...
-
-from flask import Flask , jsonify
+from flask import Flask, render_template
+from flask_socketio import SocketIO, emit
 
 app = Flask(__name__)
+socketio = SocketIO(app)
+
+values = {
+    'slider1': 25,
+    'slider2': 0,
+}
 
 @app.route('/')
-def hello_world():
-    return 'Hello from four fruits'
+def index():
+    return render_template('index.html',**values)
 
-@app.route('/send')
-def send():
-    dict = {
-        "name" : "Md sharique",
-        "age" : 12
-        }
-    return jsonify(dict)
+@socketio.on('connect')
+def test_connect():
+    emit('after connect',  {'data':'Lets dance'})
+
+@socketio.on('Slider value changed')
+def value_changed(message):
+    values[message['who']] = message['data']
+    emit('update value', message, broadcast=True)
+if __name__ == "__main__" :
+    socketio.run(app)
