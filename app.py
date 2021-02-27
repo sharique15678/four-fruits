@@ -21,5 +21,8 @@ def test_connect():
 def value_changed(message):
     values[message['who']] = message['data']
     emit('update value', message, broadcast=True)
+@socketio.on('recieve')
+def value_changed(message):
+    emit('send', message, broadcast=True)
 if __name__ == "__main__" :
     socketio.run(app)
